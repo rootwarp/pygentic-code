@@ -98,7 +98,4 @@ class ProgressEvent(StreamEvent):
 class EventCallback(Protocol):
     """Protocol for event callbacks."""
 
-    async def __call__(
-        self,
-        event: StreamEvent,
-    ) -> None: ...
+    async def __call__(self, event: StreamEvent) -> None: ...

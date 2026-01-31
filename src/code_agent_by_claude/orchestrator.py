@@ -12,16 +12,10 @@ from typing import Any
 from .agents.coder import CoderAgent, CodeResult
 from .agents.detail_planner import DetailPlannerAgent
 from .agents.planner import Plan, PlannerAgent
-from .agents.researcher import (
-    ResearcherAgent,
-    ResearchResult,
-)
+from .agents.researcher import ResearcherAgent, ResearchResult
 from .agents.reviewer import ReviewerAgent, ReviewResult
 from .events import EventType, PhaseEvent
-from .stream_handler import (
-    EventCallbackFn,
-    StreamHandler,
-)
+from .stream_handler import EventCallbackFn, StreamHandler
 
 
 def _expand_env_vars(value: str) -> str:

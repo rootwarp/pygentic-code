@@ -121,11 +121,7 @@ class CoderAgent:
                         prev_text_len = len(full)
                         result_text = full
                         if verbose and not stream_handler:
-                            print(
-                                delta,
-                                end="",
-                                flush=True,
-                            )
+                            print(delta, end="", flush=True)
                 is_success = (
                     isinstance(msg, ResultMessage) and msg.subtype == "success"
                 )
@@ -141,14 +137,10 @@ class CoderAgent:
             return None
 
     @staticmethod
-    def _parse_result(
-        response: str,
-    ) -> CodeResult:
+    def _parse_result(response: str) -> CodeResult:
         """Parse response into a CodeResult."""
         json_match = re.search(
-            r"```json\s*(.*?)\s*```",
-            response,
-            re.DOTALL,
+            r"```json\s*(.*?)\s*```", response, re.DOTALL
         )
         if json_match:
             try:

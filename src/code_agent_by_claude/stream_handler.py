@@ -23,38 +23,24 @@ class StreamHandler:
     """Dispatches streaming events to callbacks."""
 
     def __init__(self) -> None:
-        self._callbacks: dict[
-            EventType,
-            list[EventCallbackFn],
-        ] = defaultdict(list)
+        self._callbacks: dict[EventType, list[EventCallbackFn]] = (
+            defaultdict(list)
+        )
         self._global_callbacks: list[EventCallbackFn] = []
 
-    def on(
-        self,
-        event_type: EventType,
-        callback: EventCallbackFn,
-    ) -> None:
+    def on(self, event_type: EventType, callback: EventCallbackFn) -> None:
         """Register a callback for an event type."""
         self._callbacks[event_type].append(callback)
 
-    def on_all(
-        self,
-        callback: EventCallbackFn,
-    ) -> None:
+    def on_all(self, callback: EventCallbackFn) -> None:
         """Register a callback for all events."""
         self._global_callbacks.append(callback)
 
-    async def emit(
-        self,
-        event: StreamEvent,
-    ) -> None:
+    async def emit(self, event: StreamEvent) -> None:
         """Dispatch event to matching callbacks."""
         for cb in self._global_callbacks:
             await cb(event)
-        for cb in self._callbacks.get(
-            event.type,
-            [],
-        ):
+        for cb in self._callbacks.get(event.type, []):
             await cb(event)
 
 
@@ -78,30 +64,12 @@ class DefaultStreamRenderer:
         if self.json_events:
             handler.on_all(self._handle_json)
         else:
-            handler.on(
-                EventType.PHASE_START,
-                self._handle_phase,
-            )
-            handler.on(
-                EventType.PHASE_END,
-                self._handle_phase,
-            )
-            handler.on(
-                EventType.TEXT_DELTA,
-                self._handle_text,
-            )
-            handler.on(
-                EventType.TOOL_START,
-                self._handle_tool,
-            )
-            handler.on(
-                EventType.TOOL_RESULT,
-                self._handle_tool,
-            )
-            handler.on(
-                EventType.THINKING,
-                self._handle_thinking,
-            )
+            handler.on(EventType.PHASE_START, self._handle_phase)
+            handler.on(EventType.PHASE_END, self._handle_phase)
+            handler.on(EventType.TEXT_DELTA, self._handle_text)
+            handler.on(EventType.TOOL_START, self._handle_tool)
+            handler.on(EventType.TOOL_RESULT, self._handle_tool)
+            handler.on(EventType.THINKING, self._handle_thinking)
 
         return handler
 
@@ -137,10 +105,7 @@ class DefaultStreamRenderer:
         else:
             print(f"[{event.phase}] Done.", file=sys.stderr)
 
-    async def _handle_text(
-        self,
-        event: StreamEvent,
-    ) -> None:
+    async def _handle_text(self, event: StreamEvent) -> None:
         if not isinstance(event, TextEvent):
             return
         if self._after_tool:
@@ -170,10 +135,7 @@ class DefaultStreamRenderer:
                 return val
         return ""
 
-    async def _handle_tool(
-        self,
-        event: StreamEvent,
-    ) -> None:
+    async def _handle_tool(self, event: StreamEvent) -> None:
         if not isinstance(event, ToolEvent):
             return
         if event.type == EventType.TOOL_START:
@@ -181,19 +143,11 @@ class DefaultStreamRenderer:
             label = (
                 f"{event.tool_name} {summary}" if summary else event.tool_name
             )
-            print(
-                f"\n  > {label}",
-                file=sys.stderr,
-                flush=True,
-            )
+            print(f"\n  > {label}", file=sys.stderr, flush=True)
             self._after_tool = True
         elif self.show_tools:
             snippet = event.tool_result[:120]
-            print(
-                f"  = {snippet}",
-                file=sys.stderr,
-                flush=True,
-            )
+            print(f"  = {snippet}", file=sys.stderr, flush=True)
 
     async def _handle_thinking(self, event: StreamEvent) -> None:
         if not self.show_thinking:

@@ -9,9 +9,7 @@ from .orchestrator import run_coding_task
 from .stream_handler import DefaultStreamRenderer
 
 
-def parse_github_issue_url(
-    url: str,
-) -> tuple[str, str, int] | None:
+def parse_github_issue_url(url: str) -> tuple[str, str, int] | None:
     """Parse a GitHub issue URL.
 
     Args:
@@ -20,7 +18,7 @@ def parse_github_issue_url(
     Returns:
         Tuple of (owner, repo, issue_number) or None.
     """
-    pattern = r"https?://github\.com/" r"([^/]+)/([^/]+)/issues/(\d+)"
+    pattern = r"https?://github\.com/([^/]+)/([^/]+)/issues/(\d+)"
     match = re.match(pattern, url)
     if match:
         return (match.group(1), match.group(2), int(match.group(3)))

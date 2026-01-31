@@ -26,10 +26,7 @@ class Plan:
 
     content: str
 
-    def save_to_dir(
-        self,
-        plans_dir: str | Path,
-    ) -> Path:
+    def save_to_dir(self, plans_dir: str | Path) -> Path:
         """Save plan as markdown."""
         path = Path(plans_dir)
         path.mkdir(parents=True, exist_ok=True)
@@ -49,8 +46,8 @@ class PlannerAgent:
         """Return the agent definition for SDK."""
         return {
             "description": (
-                "Expert software architect that"
-                " analyzes requirements and creates"
+                "Expert software architect that analyzes"
+                " requirements and creates"
                 " overall implementation plans."
             ),
             "prompt": self.system_prompt,
@@ -113,11 +110,7 @@ class PlannerAgent:
                         prev_text_len = len(full)
                         result_text = full
                         if verbose and not stream_handler:
-                            print(
-                                delta,
-                                end="",
-                                flush=True,
-                            )
+                            print(delta, end="", flush=True)
                 if not (
                     isinstance(message, ResultMessage)
                     and message.subtype == "success"

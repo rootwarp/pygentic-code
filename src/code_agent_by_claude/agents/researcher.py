@@ -39,9 +39,9 @@ class ResearcherAgent:
         """Return the agent definition for SDK."""
         return {
             "description": (
-                "Expert requirements analyst that"
-                " researches and understands"
-                " requirements before planning."
+                "Expert requirements analyst that researches"
+                " and understands requirements"
+                " before planning."
             ),
             "prompt": self.system_prompt,
             "tools": [
@@ -110,11 +110,7 @@ class ResearcherAgent:
                         prev_text_len = len(full)
                         result_text = full
                         if verbose and not stream_handler:
-                            print(
-                                delta,
-                                end="",
-                                flush=True,
-                            )
+                            print(delta, end="", flush=True)
                 is_success = (
                     isinstance(msg, ResultMessage) and msg.subtype == "success"
                 )

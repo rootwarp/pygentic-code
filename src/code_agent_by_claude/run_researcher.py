@@ -7,9 +7,7 @@ from pathlib import Path
 
 import click
 
-from code_agent_by_claude.agents.researcher import (
-    ResearcherAgent,
-)
+from code_agent_by_claude.agents.researcher import ResearcherAgent
 from code_agent_by_claude.stream_handler import (
     DefaultStreamRenderer,
 )
@@ -29,8 +27,7 @@ async def run_researcher(
     print("-" * 40)
 
     renderer = DefaultStreamRenderer(
-        show_thinking=show_thinking,
-        show_tools=show_tools,
+        show_thinking=show_thinking, show_tools=show_tools
     )
     handler = renderer.create_handler()
 

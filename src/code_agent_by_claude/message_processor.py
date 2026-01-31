@@ -20,8 +20,8 @@ from .stream_handler import StreamHandler
 
 
 class MessageProcessor:
-    """Converts Claude Agent SDK messages into typed
-    events and emits them via a StreamHandler."""
+    """Converts Claude Agent SDK messages into typed events
+    and emits them via a StreamHandler."""
 
     def __init__(
         self,
@@ -45,10 +45,7 @@ class MessageProcessor:
         elif hasattr(message, "event"):
             await self._process_stream_event(message)
 
-    async def _process_system(
-        self,
-        message: SystemMessage,
-    ) -> None:
+    async def _process_system(self, message: SystemMessage) -> None:
         if message.subtype == "init":
             event = ProgressEvent(
                 type=EventType.PROGRESS,
@@ -59,10 +56,7 @@ class MessageProcessor:
             )
             await self.handler.emit(event)
 
-    async def _process_assistant(
-        self,
-        message: AssistantMessage,
-    ) -> None:
+    async def _process_assistant(self, message: AssistantMessage) -> None:
         event: StreamEvent
         full_text = ""
         for block in message.content:
@@ -122,10 +116,7 @@ class MessageProcessor:
                 )
                 await self.handler.emit(event)
 
-    async def _process_result(
-        self,
-        message: ResultMessage,
-    ) -> None:
+    async def _process_result(self, message: ResultMessage) -> None:
         if message.subtype == "success":
             text = message.result or ""
             if not text:
@@ -142,10 +133,7 @@ class MessageProcessor:
             )
             await self.handler.emit(event)
 
-    async def _process_stream_event(
-        self,
-        message: object,
-    ) -> None:
+    async def _process_stream_event(self, message: object) -> None:
         """Process a raw SDK StreamEvent."""
         raw = getattr(message, "event", {})
         if not isinstance(raw, dict):

@@ -21,10 +21,7 @@ __all__ = [
 ]
 
 
-def warn_mcp(
-    message: SystemMessage,
-    verbose: bool,
-) -> None:
+def warn_mcp(message: SystemMessage, verbose: bool) -> None:
     """Warn about disconnected MCP servers."""
     data: dict[str, Any] = getattr(message, "data", {})
     servers = data.get("mcp_servers", [])

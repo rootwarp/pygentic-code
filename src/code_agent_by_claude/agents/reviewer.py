@@ -42,10 +42,7 @@ class ReviewResult:
     summary: str = ""
     passed: bool = True
 
-    def save_to_dir(
-        self,
-        reviews_dir: str | Path,
-    ) -> Path:
+    def save_to_dir(self, reviews_dir: str | Path) -> Path:
         """Save review results to directory."""
         path = Path(reviews_dir)
         path.mkdir(parents=True, exist_ok=True)
@@ -57,13 +54,10 @@ class ReviewResult:
                 if f.line:
                     loc += f":{f.line}"
                 md_lines.append(
-                    f"### [{f.severity.upper()}]"
-                    f" {f.category}\n\n"
+                    f"### [{f.severity.upper()}] {f.category}\n\n"
                     f"- **Location**: `{loc}`\n"
-                    f"- **Issue**:"
-                    f" {f.description}\n"
-                    f"- **Suggestion**:"
-                    f" {f.suggestion}\n"
+                    f"- **Issue**: {f.description}\n"
+                    f"- **Suggestion**: {f.suggestion}\n"
                 )
         else:
             md_lines.append("\nNo issues found.\n")
@@ -91,16 +85,12 @@ class ReviewResult:
         return path
 
 
-def _parse_review(
-    text: str,
-) -> ReviewResult | None:
+def _parse_review(text: str) -> ReviewResult | None:
     """Parse JSON review output."""
     if not text or not text.strip():
         return None
     json_match = re.search(
-        r"```json\s*(.*?)\s*```",
-        text,
-        re.DOTALL,
+        r"```json\s*(.*?)\s*```", text, re.DOTALL
     )
     raw = json_match.group(1) if json_match else text
     try:
@@ -137,9 +127,8 @@ class ReviewerAgent:
         """Return the agent definition for SDK."""
         return {
             "description": (
-                "Expert code reviewer that checks"
-                " convention, quality, tests, bugs,"
-                " and security."
+                "Expert code reviewer that checks convention,"
+                " quality, tests, bugs, and security."
             ),
             "prompt": self.system_prompt,
             "tools": [
@@ -204,11 +193,7 @@ class ReviewerAgent:
                         prev_text_len = len(full)
                         result_text = full
                         if verbose and not stream_handler:
-                            print(
-                                delta,
-                                end="",
-                                flush=True,
-                            )
+                            print(delta, end="", flush=True)
                 if not (
                     isinstance(message, ResultMessage)
                     and message.subtype == "success"
